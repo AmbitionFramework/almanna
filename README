@@ -1,0 +1,40 @@
+Almanna ORM
+-----------
+
+REQUIREMENTS
+
+Almanna is written in the Vala programming language, and relies on other
+libraries for its functionality. To build, you will need:
+
+* Vala 0.16.0 or higher
+* CMake 2.8 or higher
+* The GCC 4.x toolchain
+
+At minimum, the following libraries are required:
+
+* glib-2.0
+* gio-2.0
+* gee-1.0
+* libgda-5.0
+* libxml-2.0
+
+OPTIONS
+
+BUILDING/INSTALLING FROM GIT
+
+Almanna uses CMake to configure and prepare the source for installation. By
+default, Almanna will install into /usr. To build the framework using an "out
+of source" build:
+
+* Verify cmake is installed on your machine
+* Create a directory called "build", and cd into that directory
+* Enter "cmake .." without the quotes to prepare the build
+* Enter "make" without the quotes to build Almanna
+* Enter "make install" as root or under sudo to install Almanna
+
+If you would like to install into another prefix, use the -D option to provide
+CMAKE_INSTALL_PREFIX:PATH to cmake. For example, to install to /usr/local:
+
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local ..
+
+Note that your LD_LIBRARY_PATH must allow for libraries in /usr/local.

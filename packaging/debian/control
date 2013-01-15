@@ -1,0 +1,15 @@
+Source: almanna
+Section: devel
+Priority: extra
+Maintainer: Nicholas Melnick <nick@ambitionframework.org>
+Build-Depends: debhelper (>= 8.0.0), libgda-5.0-dev, libgda-5.0-4, valac-0.16, libglib2.0-dev, libgee-dev, gcc, make
+Standards-Version: 3.9.3
+Homepage: http://www.ambitionframework.org
+#Vcs-Git: git://git.debian.org/collab-maint/almanna.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/almanna.git;a=summary
+
+Package: almanna-0.1
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: a simple ORM for GObject/Vala.
+ a simple ORM for GObject/Vala.
