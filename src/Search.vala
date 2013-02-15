@@ -242,6 +242,25 @@ namespace Almanna {
 		}
 		
 		/**
+		 * Add a like check to the search, is equivalent to WHERE foo LIKE 'bar'.
+		 * @param column Column name
+		 */
+		public Search<G> like( string column, ... ) throws SearchError {
+			add_comparison( SqlOperatorType.LIKE, column, va_list() );
+			return this;
+		}
+		
+		/**
+		 * Add an ilike check to the search, is equivalent to WHERE foo ILIKE
+		 * 'bar', but will only work with PostgreSQL.
+		 * @param column Column name
+		 */
+		public Search<G> ilike( string column, ... ) throws SearchError {
+			add_comparison( SqlOperatorType.ILIKE, column, va_list() );
+			return this;
+		}
+		
+		/**
 		 * Add an order expression.
 		 * @param column Column name
 		 * @param is_descending Set true if order is descending. Defaults to false.
