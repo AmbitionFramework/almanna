@@ -27,13 +27,14 @@ OPTIONS
 	--enable-experimental)
 
 find_package(PkgConfig)
-pkg_check_modules(DEPS REQUIRED glib-2.0 gee-1.0 gio-2.0 libgscgi-1.0)
+pkg_check_modules(DEPS REQUIRED glib-2.0 gee-1.0 gio-2.0 libgda-5.0 libxml-2.0)
 set(CFLAGS
         ${DEPS_CFLAGS} ${DEPS_CFLAGS_OTHER} -I../src
 )
 set(LIB_PATHS
-        ${DEPS_LIBRARY_DIRS} -L../src
+        ${DEPS_LIBRARY_DIRS} ../src
 )
+link_directories(${LIB_PATHS})
 add_definitions(${CFLAGS})
 
 add_executable(${BINNAME} ${VALA_C})
