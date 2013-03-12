@@ -32,7 +32,7 @@ set(CFLAGS
         ${DEPS_CFLAGS} ${DEPS_CFLAGS_OTHER} -I../src
 )
 set(LIB_PATHS
-        ${DEPS_LIBRARY_DIRS} ../src
+        ${DEPS_LIBRARY_DIRS} ${CMAKE_BINARY_DIR}/src
 )
 link_directories(${LIB_PATHS})
 add_definitions(${CFLAGS})
