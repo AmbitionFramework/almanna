@@ -22,7 +22,8 @@ set (PKGVERSION 0.1)
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
 set (DOLLAR "$")
 
-add_subdirectory (src)
+add_subdirectory (src/libalmanna)
+add_subdirectory (src/bin)
 add_subdirectory (test)
 
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/libgda-5.0.vapi DESTINATION ${CMAKE_INSTALL_PREFIX}/share/vala/vapi/)
