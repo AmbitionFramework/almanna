@@ -94,6 +94,13 @@ public class EntityDefineTest {
 			assert( thrown_error == true );
 			assert( error == "Column username is not defined" );
 		});
+		Test.add_func("/almanna/entity/has_one", () => {
+			var a = new UserEntity();
+			a.do_add_columns();
+			a.do_add_has_one();
+			standard_assert(a);
+			assert( a.has_ones.has_key("entity_one") );
+		});
 	}
 
 	public static void standard_assert( UserEntity a ) {

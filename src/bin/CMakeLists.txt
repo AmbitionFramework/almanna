@@ -26,18 +26,18 @@ pkg_check_modules(ALMANNABIN_DEPS REQUIRED ${ALMANNABIN_VALA_PACKAGES})
 
 set(ALMANNABIN_CFLAGS
 	${ALMANNABIN_DEPS_CFLAGS_ALL}
-	-I../libalmanna
+	-I${CMAKE_BINARY_DIR}/src/libalmanna
 	-w
 )
 set(ALMANNABIN_DEPS_LIB_PATHS
 	${ALMANNABIN_DEPS_LIBRARY_DIRS}
-	${CMAKE_BINARY_DIR}/libalmanna
+	${CMAKE_BINARY_DIR}/src/libalmanna
 )
 add_definitions(${ALMANNABIN_DEPS_CFLAGS})
 
 link_directories(${ALMANNABIN_DEPS_LIB_PATHS})
 add_executable(${BINNAME} ${ALMANNABIN_VALA_C})
-include_directories(${CMAKE_BINARY_DIR}/libalmanna)
+include_directories(${CMAKE_BINARY_DIR}/src/libalmanna)
 add_dependencies(${BINNAME} ${PKGNAME}-${PKGVERSION})
 target_link_libraries(${BINNAME} ${ALMANNABIN_DEPS_LIBRARIES} readline gthread-2.0 almanna-0.1)
 

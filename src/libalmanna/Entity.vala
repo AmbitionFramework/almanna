@@ -27,6 +27,7 @@ namespace Almanna {
 	 */
 	public errordomain EntityError {
 		MISSING_COLUMN,
+		MISSING_ENTITY,
 		DATABASE_ERROR,
 		MISSING_REQUIRED
 	}
@@ -291,10 +292,20 @@ namespace Almanna {
 		 * SQL implementations would make this an INNER JOIN.
 		 * @param property_name Property name to bind to.
 		 * @param this_column Identifying column name in this entity
-		 * @param foreign_column Identifying column name in the target entity
+		 * @param foreign_column Identifying column name in the target entity.
+		 *                       Will default to the same name in the target.
 		 */
-		protected void add_has_one( string property_name, string? this_column, string? foreign_column ) {
-			stdout.printf( "%s\n", "has_one is not implemented." );
+		protected void add_has_one( string property_name, string this_column, string? foreign_column = null ) throws EntityError {
+			var property_type = _gtype_of(property_name);
+			if ( property_type == null ) {
+				throw new EntityError.MISSING_ENTITY("Property missing");
+			}
+			has_ones[property_name] = new RelationshipInfo(
+				property_type,
+				property_name,
+				this_column,
+				( foreign_column == null ? this_column : foreign_column )
+			);
 		}
 
 		protected void add_has_many( string name, Entity many_of, string? this_column, string? foreign_column ) {

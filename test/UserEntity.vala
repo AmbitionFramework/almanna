@@ -26,11 +26,13 @@ public class UserEntity : Almanna.Entity {
 	public string username { get; set; }
 	public string password { get; set; }
 	public string status { get; set; default = "New"; }
+	public UserEntityOne entity_one { get; set; }
 
 	public override void register_entity() {
 		do_add_column();
 		do_set_primary_key();
 		do_add_unique_constraint();
+		do_add_has_one();
 	}
 
 	public void do_add_column() {
@@ -55,5 +57,20 @@ public class UserEntity : Almanna.Entity {
 
 	public void do_add_unique_constraint() throws EntityError {
 		add_unique_constraint( "username", { "username" } );
+	}
+
+	public void do_add_has_one() throws EntityError {
+		add_has_one( "entity_one", "user_id", "user_id" );
+	}
+}
+
+public class UserEntityOne : Almanna.Entity {
+	public int user_id { get; set; }
+	public string check_flag { get; set; }
+
+	public override void register_entity() {
+		add_column( new Column<int>.with_name_type( "user_id", "int" ) );
+		add_column( new Column<string>.with_name_type( "check_flag", "varchar" ) );
+		set_primary_key("user_id");
 	}
 }

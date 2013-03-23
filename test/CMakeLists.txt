@@ -22,17 +22,17 @@ PACKAGES
     ${PKGNAME}-${PKGVERSION}
 OPTIONS
 	--thread
-	--vapidir ../src
+	--vapidir ../src/libalmanna
 	--vapidir=${CMAKE_SOURCE_DIR}
 	--enable-experimental)
 
 find_package(PkgConfig)
 pkg_check_modules(DEPS REQUIRED glib-2.0 gee-1.0 gio-2.0 libgda-5.0 libxml-2.0)
 set(CFLAGS
-        ${DEPS_CFLAGS} ${DEPS_CFLAGS_OTHER} -I../src
+        ${DEPS_CFLAGS} ${DEPS_CFLAGS_OTHER} -I../src/libalmanna
 )
 set(LIB_PATHS
-        ${DEPS_LIBRARY_DIRS} ${CMAKE_BINARY_DIR}/src
+        ${DEPS_LIBRARY_DIRS} ${CMAKE_BINARY_DIR}/src/libalmanna
 )
 link_directories(${LIB_PATHS})
 add_definitions(${CFLAGS})
