@@ -101,6 +101,9 @@ namespace Almanna {
 		 * All registered primary keys
 		 */
 		public string[] primary_key_list { get; set; }
+
+		public HashMap<string,RelationshipInfo> has_ones { get; set; default = new HashMap<string,RelationshipInfo>(); }
+
 		public ArrayList<Value?> primary_key_values { get; set; default = new ArrayList<Value?>(); }
 
 		/**
@@ -282,7 +285,15 @@ namespace Almanna {
 			this.constraints.set( name, al );
 		}
 
-		protected void add_has_one( string name, Entity one_of, string? this_column, string? foreign_column ) {
+		/**
+		 * Add a has_one relationship. A has_one relationship implies that this
+		 * entity will have a corresponding record in the joined entity. Most
+		 * SQL implementations would make this an INNER JOIN.
+		 * @param property_name Property name to bind to.
+		 * @param this_column Identifying column name in this entity
+		 * @param foreign_column Identifying column name in the target entity
+		 */
+		protected void add_has_one( string property_name, string? this_column, string? foreign_column ) {
 			stdout.printf( "%s\n", "has_one is not implemented." );
 		}
 

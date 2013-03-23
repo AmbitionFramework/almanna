@@ -11,6 +11,7 @@ vala_precompile(LIBALMANNA_VALA_C
 	Loader.vala
 	Logger.vala
 	Query.vala
+	RelationshipInfo.vala
 	Repo.vala
 	Search.vala
 	Server.vala
