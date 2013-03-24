@@ -101,6 +101,13 @@ public class EntityDefineTest {
 			standard_assert(a);
 			assert( a.has_ones.has_key("entity_one") );
 		});
+		Test.add_func("/almanna/entity/has_many", () => {
+			var a = new UserEntity();
+			a.do_add_columns();
+			a.do_add_has_many();
+			standard_assert(a);
+			assert( a.has_manys.has_key("entity_many") );
+		});
 	}
 
 	public static void standard_assert( UserEntity a ) {

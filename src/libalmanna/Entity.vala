@@ -103,7 +103,15 @@ namespace Almanna {
 		 */
 		public string[] primary_key_list { get; set; }
 
+		/**
+		 * All registered has_one relationships
+		 */
 		public HashMap<string,RelationshipInfo> has_ones { get; set; default = new HashMap<string,RelationshipInfo>(); }
+
+		/**
+		 * All registered has_many relationships
+		 */
+		public HashMap<string,RelationshipInfo> has_manys { get; set; default = new HashMap<string,RelationshipInfo>(); }
 
 		public ArrayList<Value?> primary_key_values { get; set; default = new ArrayList<Value?>(); }
 
@@ -308,8 +316,27 @@ namespace Almanna {
 			);
 		}
 
-		protected void add_has_many( string name, Entity many_of, string? this_column, string? foreign_column ) {
-			stdout.printf( "%s\n", "has_many is not implemented." );
+		/**
+		 * Add a has_many relationship. A has_many relationship has zero or more
+		 * related records in another table. Most implementations would do a
+		 * separate select.
+		 * @param property_name Property name to bind to.
+		 * @param many_of Type of the foreign entity (ex: typeof(NewEntity) ).
+		 * @param this_column Identifying column name in this entity
+		 * @param foreign_column Identifying column name in the target entity.
+		 *                       Will default to the same name in the target.
+		 */
+		protected void add_has_many( string property_name, Type many_of, string? this_column, string? foreign_column ) {
+			var property_type = _gtype_of(property_name);
+			if ( property_type == null ) {
+				throw new EntityError.MISSING_ENTITY("Property missing");
+			}
+			has_manys[property_name] = new RelationshipInfo(
+				many_of,
+				property_name,
+				this_column,
+				( foreign_column == null ? this_column : foreign_column )
+			);
 		}
 
 		protected void add_many_to_many( string name, Entity join_entity, Entity foreign_entity, string? this_column, string? foreign_column ) {
