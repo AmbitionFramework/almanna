@@ -101,5 +101,20 @@ public class SearchTest {
 			UserEntity ue = s.single();
 			assert( ue == null );
 		});
+		Test.add_func("/almanna/search/like", () => {
+			var s = new Almanna.Search<UserEntity>();
+			s.like( "username", "%oba%" );
+			UserEntity ue = s.single();
+			assert( ue != null );
+			assert( ue.user_id == 1 );
+			assert( ue.username == "foobar" );
+
+			s = new Almanna.Search<UserEntity>();
+			s.like( "username", "%rfo%" );
+			ue = s.single();
+			assert( ue != null );
+			assert( ue.user_id == 2 );
+			assert( ue.username == "barfoo" );
+		});
 	}
 }
