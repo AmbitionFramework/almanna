@@ -911,6 +911,7 @@ namespace Gda {
 		public Gda.SqlBuilderId select_add_field (string field_name, string? table_name, string? alias);
 		public Gda.SqlBuilderId select_add_target (string table_name, string? alias);
 		public Gda.SqlBuilderId select_add_target_id (Gda.SqlBuilderId table_id, string? alias);
+		public Gda.SqlBuilderId select_join_targets (Gda.SqlBuilderId left_target_id, Gda.SqlBuilderId right_target_id, SqlSelectJoinType join_type, Gda.SqlBuilderId join_expr);
 		public void select_group_by (Gda.SqlBuilderId expr_id);
 		public void select_order_by (Gda.SqlBuilderId expr_id, bool asc, string? collation_name);
 		public void select_set_distinct (bool distinct, Gda.SqlBuilderId expr_id);
