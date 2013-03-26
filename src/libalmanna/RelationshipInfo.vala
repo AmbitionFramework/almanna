@@ -20,10 +20,18 @@
  */
 
 namespace Almanna {
+
+	public enum RelationshipType {
+		ONE,
+		MANY
+	}
+
 	/**
 	 * Relationship information.
 	 */
 	public class RelationshipInfo {
+
+		public RelationshipType relationship_type { get; set; }
 		public Type entity_type { get; set; }
 		public string property_name { get; set; }
 		public string this_column { get; set; }
@@ -36,7 +44,8 @@ namespace Almanna {
 		 * @param this_column This column
 		 * @param foreign_column Foreign column
 		 */
-		public RelationshipInfo( Type entity_type, string property_name, string this_column, string foreign_column ) {
+		public RelationshipInfo( RelationshipType relationship_type, Type entity_type, string property_name, string this_column, string foreign_column ) {
+			this.relationship_type = relationship_type;
 			this.entity_type = entity_type;
 			this.property_name = property_name;
 			this.this_column = this_column;

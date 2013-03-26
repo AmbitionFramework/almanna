@@ -99,14 +99,16 @@ public class EntityDefineTest {
 			a.do_add_columns();
 			a.do_add_has_one();
 			standard_assert(a);
-			assert( a.has_ones.has_key("entity_one") );
+			assert( a.relationships.has_key("entity_one") );
+			assert( a.relationships["entity_one"].relationship_type == Almanna.RelationshipType.ONE );
 		});
 		Test.add_func("/almanna/entity/has_many", () => {
 			var a = new UserEntity();
 			a.do_add_columns();
 			a.do_add_has_many();
 			standard_assert(a);
-			assert( a.has_manys.has_key("entity_many") );
+			assert( a.relationships.has_key("entity_many") );
+			assert( a.relationships["entity_many"].relationship_type == Almanna.RelationshipType.MANY );
 		});
 	}
 

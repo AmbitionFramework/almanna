@@ -28,8 +28,8 @@ public class ServerTest {
 		Test.add_func("/almanna/server/open", () => {
 			var c = new Almanna.Config();
 			c.connection_string = "SQLite://DB_DIR=.;DB_NAME=test";
+			Almanna.Server.open(c);
 			var a = Almanna.Server.get_instance();
-			a.open(c);
 			assert( a.is_opened() == true );
 		});
 	}

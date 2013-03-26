@@ -104,14 +104,9 @@ namespace Almanna {
 		public string[] primary_key_list { get; set; }
 
 		/**
-		 * All registered has_one relationships
+		 * All registered relationships
 		 */
-		public HashMap<string,RelationshipInfo> has_ones { get; set; default = new HashMap<string,RelationshipInfo>(); }
-
-		/**
-		 * All registered has_many relationships
-		 */
-		public HashMap<string,RelationshipInfo> has_manys { get; set; default = new HashMap<string,RelationshipInfo>(); }
+		public HashMap<string,RelationshipInfo> relationships { get; set; default = new HashMap<string,RelationshipInfo>(); }
 
 		public ArrayList<Value?> primary_key_values { get; set; default = new ArrayList<Value?>(); }
 
@@ -308,7 +303,8 @@ namespace Almanna {
 			if ( property_type == null ) {
 				throw new EntityError.MISSING_ENTITY("Property missing");
 			}
-			has_ones[property_name] = new RelationshipInfo(
+			relationships[property_name] = new RelationshipInfo(
+				RelationshipType.ONE,
 				property_type,
 				property_name,
 				this_column,
@@ -331,7 +327,8 @@ namespace Almanna {
 			if ( property_type == null ) {
 				throw new EntityError.MISSING_ENTITY("Property missing");
 			}
-			has_manys[property_name] = new RelationshipInfo(
+			relationships[property_name] = new RelationshipInfo(
+				RelationshipType.MANY,
 				many_of,
 				property_name,
 				this_column,

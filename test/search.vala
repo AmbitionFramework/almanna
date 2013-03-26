@@ -116,5 +116,12 @@ public class SearchTest {
 			assert( ue.user_id == 2 );
 			assert( ue.username == "barfoo" );
 		});
+		Test.add_func("/almanna/search/join_one", () => {
+			var s = new Almanna.Search<UserEntity>();
+			s.eq( "user_id", 1 );
+			s.relationship("entity_one");
+			stdout.printf( "\n%s\n", s.as_query() );
+			UserEntity ue = s.single();
+		});
 	}
 }

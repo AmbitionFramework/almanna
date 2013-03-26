@@ -27,6 +27,8 @@ public class RepoTest {
 		});
 		Test.add_func("/almanna/repo/load", () => {
 			Almanna.Repo.add_entity( typeof(UserEntity) );
+			Almanna.Repo.add_entity( typeof(UserEntityOne) );
+			Almanna.Repo.add_entity( typeof(UserEntityMany) );
 			assert( Almanna.Repo.get_instance().entities.has_key("UserEntity") );
 			UserEntity u = (UserEntity) Almanna.Repo.get_instance().entities.get("UserEntity");
 			assert( u.status == "New" );

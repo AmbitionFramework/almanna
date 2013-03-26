@@ -42,7 +42,7 @@ namespace Almanna {
 	public class Search<G> : Object {
 		private ArrayList<string> command_list { get; set; default = new ArrayList<string>(); }
 		private string from { get; set; }
-		//private ArrayList<string> joins { get; set; default = new ArrayList<string>(); }
+		private ArrayList<string> joins { get; set; default = new ArrayList<string>(); }
 		private ArrayList<Comparison> wheres { get; set; default = new ArrayList<Comparison>(); }
 		private ArrayList<OrderBy?> orders { get; set; default = new ArrayList<OrderBy?>(); }
 		private int _page { get; set; default = 0; }
@@ -265,8 +265,17 @@ namespace Almanna {
 		 * @param column Column name
 		 * @param is_descending Set true if order is descending. Defaults to false.
 		 */
-		public Search<G> order_by( string column, bool is_descending = false ) throws SearchError {
+		public Search<G> order_by( string column, bool is_descending = false ) {
 			orders.add( OrderBy() { column_name = column, is_descending = is_descending } );
+			return this;
+		}
+
+		/**
+		 * Retrieve results of an existing relationship.
+		 * @param relationship_name Property name of the relationship.
+		 */
+		public Search<G> relationship( string relationship_name ) {
+			joins.add(relationship_name);
 			return this;
 		}
 
@@ -359,7 +368,9 @@ namespace Almanna {
 			validate_expression();
 
 			var builder = new Gda.SqlBuilder( SqlStatementType.SELECT );
-			builder.select_add_target( from, null );
+			var core_target = builder.select_add_target( from, "me" );
+
+			// COUNT or Columns
 			if (as_count) {
 				builder.add_field_value_id(
 					builder.add_function_v( "COUNT", { builder.add_id("*") } ),
@@ -367,14 +378,30 @@ namespace Almanna {
 				);
 			} else {
 				foreach ( string c in core_entity.columns.keys ) {
-					builder.select_add_field( c, from, c );
+					builder.select_add_field( c, "me", c );
+				}
+			}
+
+			// Build JOIN
+			foreach ( string property_name in joins ) {
+				RelationshipInfo r = core_entity.relationships[property_name];
+				if ( r != null && r.relationship_type == RelationshipType.ONE ) {
+					var join_target = builder.select_add_target( Repo.get_entity( r.entity_type ).entity_name, property_name );
+					builder.select_join_targets( core_target, join_target, SqlSelectJoinType.INNER, 0 );
 				}
 			}
 
 			// Build WHERE clause
 			SqlBuilderId conditions = -1;
 			foreach ( Comparison c in wheres ) {
-				var field_id = builder.add_id( c.left );
+				string table_name = "me";
+				string column_name = c.left;
+				if ( "." in c.left ) {
+					string[] pair = c.left.split(".");
+					table_name = pair[0];
+					column_name = pair[1];
+				}
+				var field_id = builder.add_field_id( column_name, table_name );
 				SqlBuilderId value_id = 0;
 				if ( c.right != null ) {
 					value_id = builder.add_expr_value( null, c.right );
@@ -393,7 +420,7 @@ namespace Almanna {
 
 			// Build ORDER
 			foreach ( OrderBy o in orders ) {
-				var field_id = builder.add_id( o.column_name );
+				var field_id = builder.add_field_id( o.column_name, "me" );
 				builder.select_order_by( field_id, !o.is_descending, null );
 			}
 
