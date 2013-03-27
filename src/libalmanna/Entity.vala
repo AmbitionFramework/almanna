@@ -313,6 +313,29 @@ namespace Almanna {
 		}
 
 		/**
+		 * Add a might_have relationship. A might_have relationship implies that 
+		 * this entity may or may not have a corresponding record in the joined
+		 * entity. Most SQL implementations would make this a LEFT JOIN.
+		 * @param property_name Property name to bind to.
+		 * @param this_column Identifying column name in this entity
+		 * @param foreign_column Identifying column name in the target entity.
+		 *                       Will default to the same name in the target.
+		 */
+		protected void add_might_have( string property_name, string this_column, string? foreign_column = null ) throws EntityError {
+			var property_type = _gtype_of(property_name);
+			if ( property_type == null ) {
+				throw new EntityError.MISSING_ENTITY("Property missing");
+			}
+			relationships[property_name] = new RelationshipInfo(
+				RelationshipType.MIGHT,
+				property_type,
+				property_name,
+				this_column,
+				( foreign_column == null ? this_column : foreign_column )
+			);
+		}
+
+		/**
 		 * Add a has_many relationship. A has_many relationship has zero or more
 		 * related records in another table. Most implementations would do a
 		 * separate select.

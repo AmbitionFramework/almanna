@@ -393,7 +393,7 @@ namespace Almanna {
 			// Build JOIN
 			foreach ( string property_name in joins ) {
 				RelationshipInfo r = core_entity.relationships[property_name];
-				if ( r != null && r.relationship_type == RelationshipType.ONE ) {
+				if ( r != null && r.relationship_type != RelationshipType.MANY ) {
 					var entity = Repo.get_entity( r.entity_type );
 					var join_target = builder.select_add_target( entity.entity_name, property_name );
 					var cond = builder.add_cond(
@@ -402,7 +402,11 @@ namespace Almanna {
 						builder.add_field_id( r.foreign_column, property_name ),
 						0
 					);
-					var join_id = builder.select_join_targets( core_target, join_target, SqlSelectJoinType.INNER, cond );
+					var join_type = SqlSelectJoinType.INNER;
+					if ( r.relationship_type == RelationshipType.MIGHT ) {
+						join_type = SqlSelectJoinType.LEFT;
+					}
+					var join_id = builder.select_join_targets( core_target, join_target, join_type, cond );
 
 					if (!as_count) {
 						foreach ( string c in entity.columns.keys ) {
@@ -498,8 +502,8 @@ namespace Almanna {
 			// Check joins for additional entities to deal with
 			foreach ( string property_name in joins ) {
 				RelationshipInfo r = core_entity.relationships[property_name];
-				if ( r != null && r.relationship_type == RelationshipType.ONE ) {
-					if ( entity_map.has_key(property_name) ) {
+				if ( r != null && r.relationship_type != RelationshipType.MANY ) {
+					if ( entity_map[property_name] != null ) {
 						try {
 							ParamSpec ps = ((Entity) entity)._get_property(property_name);
 							Value new_value = Value( ps.value_type );
@@ -514,7 +518,8 @@ namespace Almanna {
 			return entity;
 		}
 
-		internal Entity _process_columns_to_entity( DataModel dm, int row_number, int start_col, int end_col, Entity entity ) {
+		internal Entity? _process_columns_to_entity( DataModel dm, int row_number, int start_col, int end_col, Entity entity ) {
+			bool not_null = false;
 			for ( int index = start_col; index <= end_col; index++ ) {
 				TableColumn c = result_columns[index];
 				ParamSpec ps = ((Entity) entity)._get_property( c.column_name );
@@ -529,7 +534,8 @@ namespace Almanna {
 								try {
 									new_value = modify_entity_value( ps, v );
 									((Entity) entity).set_property( ps.name, new_value );
-								} catch (SearchError e) {
+									not_null = true;
+								} catch (Error e) {
 									
 								}
 							}
@@ -539,7 +545,7 @@ namespace Almanna {
 					}
 				}
 			}
-			return entity;
+			return ( not_null ? entity : null );
 		}
 
 		/**

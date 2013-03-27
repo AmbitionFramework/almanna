@@ -23,6 +23,7 @@ namespace Almanna {
 
 	public enum RelationshipType {
 		ONE,
+		MIGHT,
 		MANY
 	}
 

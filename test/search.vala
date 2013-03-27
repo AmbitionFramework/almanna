@@ -116,7 +116,7 @@ public class SearchTest {
 			assert( ue.user_id == 2 );
 			assert( ue.username == "barfoo" );
 		});
-		Test.add_func("/almanna/search/join_one", () => {
+		Test.add_func("/almanna/search/join/has_one", () => {
 			var s = new Almanna.Search<UserEntity>();
 			s.eq( "user_id", 1 );
 			s.relationship("entity_one");
@@ -125,6 +125,25 @@ public class SearchTest {
 			assert( ue.user_id == 1 );
 			assert( ue.entity_one != null );
 			assert( ue.entity_one.check_flag == "Y" );
+		});
+		Test.add_func("/almanna/search/join/might_have/exists", () => {
+			var s = new Almanna.Search<UserEntity>();
+			s.eq( "user_id", 1 );
+			s.relationship("entity_might_one");
+			UserEntity ue = s.single();
+			assert( ue != null );
+			assert( ue.user_id == 1 );
+			assert( ue.entity_might_one != null );
+			assert( ue.entity_might_one.check_flag == "Y" );
+		});
+		Test.add_func("/almanna/search/join/might_have/not_exists", () => {
+			var s = new Almanna.Search<UserEntity>();
+			s.eq( "user_id", 2 );
+			s.relationship("entity_might_one");
+			UserEntity ue = s.single();
+			assert( ue != null );
+			assert( ue.user_id == 2 );
+			assert( ue.entity_might_one == null );
 		});
 	}
 }

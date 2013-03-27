@@ -27,6 +27,7 @@ public class UserEntity : Almanna.Entity {
 	public string password { get; set; }
 	public string status { get; set; default = "New"; }
 	public UserEntityOne entity_one { get; set; }
+	public UserEntityOne entity_might_one { get; set; }
 	public ArrayList<UserEntityMany> entity_many { get; set; }
 
 	public override void register_entity() {
@@ -34,6 +35,7 @@ public class UserEntity : Almanna.Entity {
 		do_set_primary_key();
 		do_add_unique_constraint();
 		do_add_has_one();
+		do_add_might_have();
 		do_add_has_many();
 	}
 
@@ -63,6 +65,10 @@ public class UserEntity : Almanna.Entity {
 
 	public void do_add_has_one() throws EntityError {
 		add_has_one( "entity_one", "user_id", "user_id" );
+	}
+
+	public void do_add_might_have() throws EntityError {
+		add_might_have( "entity_might_one", "user_id", "user_id" );
 	}
 
 	public void do_add_has_many() throws EntityError {
