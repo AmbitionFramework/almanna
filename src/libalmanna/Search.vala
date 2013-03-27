@@ -35,6 +35,11 @@ namespace Almanna {
 		public bool is_descending;
 	}
 
+	struct TableColumn {
+		public string table_alias;
+		public string column_name;
+	}
+
 	/**
 	 * Provides functionality to search Entities and retrieve records or lists
 	 * of records.
@@ -48,6 +53,7 @@ namespace Almanna {
 		private int _page { get; set; default = 0; }
 		private int _rows { get; set; default = 0; }
 		private Entity core_entity { get; set; }
+		private ArrayList<TableColumn?> result_columns { get; set; }
 
 		/**
 		 * Create Search instance. Throws a SearchError if the entity is not
@@ -367,6 +373,7 @@ namespace Almanna {
 		private SqlBuilder construct_query( bool as_count = false ) throws SearchError {
 			validate_expression();
 
+			result_columns = new ArrayList<TableColumn?>();
 			var builder = new Gda.SqlBuilder( SqlStatementType.SELECT );
 			var core_target = builder.select_add_target( from, "me" );
 
@@ -378,7 +385,8 @@ namespace Almanna {
 				);
 			} else {
 				foreach ( string c in core_entity.columns.keys ) {
-					builder.select_add_field( c, "me", c );
+					builder.select_add_field( c, "me", "me_%s".printf(c) );
+					result_columns.add( TableColumn() { table_alias = "me", column_name = c } );
 				}
 			}
 
@@ -386,8 +394,22 @@ namespace Almanna {
 			foreach ( string property_name in joins ) {
 				RelationshipInfo r = core_entity.relationships[property_name];
 				if ( r != null && r.relationship_type == RelationshipType.ONE ) {
-					var join_target = builder.select_add_target( Repo.get_entity( r.entity_type ).entity_name, property_name );
-					builder.select_join_targets( core_target, join_target, SqlSelectJoinType.INNER, 0 );
+					var entity = Repo.get_entity( r.entity_type );
+					var join_target = builder.select_add_target( entity.entity_name, property_name );
+					var cond = builder.add_cond(
+						SqlOperatorType.EQ,
+						builder.add_field_id( r.this_column, "me" ),
+						builder.add_field_id( r.foreign_column, property_name ),
+						0
+					);
+					var join_id = builder.select_join_targets( core_target, join_target, SqlSelectJoinType.INNER, cond );
+
+					if (!as_count) {
+						foreach ( string c in entity.columns.keys ) {
+							builder.select_add_field( c, property_name, "%s_%s".printf( property_name, c ) );
+							result_columns.add( TableColumn() { table_alias = property_name, column_name = c } );
+						}
+					}
 				}
 			}
 
@@ -453,10 +475,49 @@ namespace Almanna {
 			((Entity) entity).unseal();
 			((Entity) entity)._set_in_storage();
 
+			var entity_map = new HashMap<string,Entity>();
+
 			// Iterate through columns and attempt to find associated properties
+			int start_index = 0;
 			int index = 0;
-			foreach ( Column c in core_entity.columns.values ) {
-				ParamSpec ps = ((Entity) entity)._get_property( c.name );
+			string entity_name = "me";
+			Entity current_entity = (Entity) entity;
+			foreach ( TableColumn c in result_columns ) {
+				if ( entity_name != c.table_alias ) {
+					entity_map[entity_name] = _process_columns_to_entity( dm, row_number, start_index, index - 1, current_entity );
+					start_index = index;
+					entity_name = c.table_alias;
+					current_entity = Repo.get_entity( core_entity.relationships[c.table_alias].entity_type );
+				}
+				index++;
+			}
+			if ( index > start_index ) {
+				entity_map[entity_name] = _process_columns_to_entity( dm, row_number, start_index, index - 1, current_entity );
+			}
+
+			// Check joins for additional entities to deal with
+			foreach ( string property_name in joins ) {
+				RelationshipInfo r = core_entity.relationships[property_name];
+				if ( r != null && r.relationship_type == RelationshipType.ONE ) {
+					if ( entity_map.has_key(property_name) ) {
+						try {
+							ParamSpec ps = ((Entity) entity)._get_property(property_name);
+							Value new_value = Value( ps.value_type );
+							new_value.set_object( entity_map[property_name] );
+							((Entity) entity).set_property( ps.name, new_value );
+						} catch (Error e) {}
+					}
+				}
+			}
+
+			((Entity) entity).seal();
+			return entity;
+		}
+
+		internal Entity _process_columns_to_entity( DataModel dm, int row_number, int start_col, int end_col, Entity entity ) {
+			for ( int index = start_col; index <= end_col; index++ ) {
+				TableColumn c = result_columns[index];
+				ParamSpec ps = ((Entity) entity)._get_property( c.column_name );
 				if ( ps != null ) {
 					try {
 						unowned Value? v = dm.get_value_at( index, row_number );
@@ -477,9 +538,7 @@ namespace Almanna {
 						stderr.printf( "Error setting value for property %s: %s\n", ps.name, e.message );
 					}
 				}
-				index++;
 			}
-			((Entity) entity).seal();
 			return entity;
 		}
 

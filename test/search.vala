@@ -120,8 +120,11 @@ public class SearchTest {
 			var s = new Almanna.Search<UserEntity>();
 			s.eq( "user_id", 1 );
 			s.relationship("entity_one");
-			stdout.printf( "\n%s\n", s.as_query() );
 			UserEntity ue = s.single();
+			assert( ue != null );
+			assert( ue.user_id == 1 );
+			assert( ue.entity_one != null );
+			assert( ue.entity_one.check_flag == "Y" );
 		});
 	}
 }
