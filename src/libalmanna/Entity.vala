@@ -219,6 +219,40 @@ namespace Almanna {
 		}
 
 		/**
+		 * Get a list of items from a related entity, as defined with a
+		 * might_have relationship.
+		 * @param related Name of relationship
+		 */
+		public ArrayList<Entity>? get_related( string related ) {
+			var search = get_related_search(related);
+			return ( search == null ? null : search.list() );
+		}
+
+		/**
+		 * Get a Search object for related items, as defined with a might_have
+		 * relationship.
+		 * @param related Name of relationship
+		 */
+		public Search<Entity>? get_related_search( string related ) {
+			var def = Repo.get_entity( this.get_class().get_type() );
+			if ( def.relationships.has_key(related) ) {
+				var info = def.relationships[related];
+				var search = Repo.get_entity( info.entity_type ).search();
+				Value v = Value( _gtype_of( info.this_column ) );
+				get_property( _normalize_property( info.this_column ), ref v );
+				if ( v.type() == typeof(int) ) {
+					search.eq( info.foreign_column, v.get_int() );
+				} else if ( v.type() == typeof(string) ) {
+					search.eq( info.foreign_column, v.get_string() );
+				} else {
+					return null;
+				}
+				return search;
+			}
+			return null;
+		}
+
+		/**
 		 * Add a column. Must have a corresponding property in the entity.
 		 * @param column Instance of a Column object
 		 */

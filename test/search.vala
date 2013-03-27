@@ -145,5 +145,16 @@ public class SearchTest {
 			assert( ue.user_id == 2 );
 			assert( ue.entity_might_one == null );
 		});
+		Test.add_func("/almanna/search/join/has_many", () => {
+			var s = new Almanna.Search<UserEntity>();
+			s.eq( "user_id", 1 );
+			UserEntity ue = s.single();
+			assert( ue != null );
+			assert( ue.user_id == 1 );
+			var foo = ue.get_related("entity_many");
+			assert( foo != null );
+			assert( foo.size == 2 );
+			assert( ( (UserEntityMany) foo[0] ).user_id == 1 );
+		});
 	}
 }

@@ -95,7 +95,7 @@ public class UserEntityMany : Almanna.Entity {
 	public override void register_entity() {
 		add_column( new Column<int>.with_name_type( "user_many_id", "int" ) );
 		add_column( new Column<int>.with_name_type( "user_id", "int" ) );
-		add_column( new Column<string>.with_name_type( "check_flag", "varchar" ) );
+		add_column( new Column<string>.with_name_type( "thing", "varchar" ) );
 		set_primary_key("user_many_id");
 	}
 }
