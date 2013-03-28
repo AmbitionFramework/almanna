@@ -91,7 +91,7 @@ namespace Almanna {
 		/**
 		 * All registered columns
 		 */
-		public HashMap<string,Column?> columns { get; set; default = new HashMap<string,Column>(); }
+		public HashMap<string,Column?> columns { get; set; default = new HashMap<string,Column?>(); }
 
 		/**
 		 * Dirty columns
