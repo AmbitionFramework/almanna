@@ -381,9 +381,6 @@ namespace Almanna {
 		 */
 		protected void add_has_many( string property_name, Type many_of, string? this_column, string? foreign_column ) {
 			var property_type = _gtype_of(property_name);
-			if ( property_type == null ) {
-				throw new EntityError.MISSING_ENTITY("Property missing");
-			}
 			relationships[property_name] = new RelationshipInfo(
 				RelationshipType.MANY,
 				many_of,
