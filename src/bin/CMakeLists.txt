@@ -4,7 +4,7 @@ set (PKGVERSION 0.1)
 
 SET( ALMANNABIN_VALA_PACKAGES
     glib-2.0
-    gee-1.0
+    gee-0.8
     gio-2.0
     libgda-5.0
     libxml-2.0
@@ -19,6 +19,7 @@ OPTIONS
 	--thread
 	--vapidir ../libalmanna
 	--enable-experimental
+	--debug
 	-g)
 
 find_package(PkgConfig)

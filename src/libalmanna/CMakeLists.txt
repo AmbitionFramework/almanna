@@ -16,29 +16,31 @@ vala_precompile(LIBALMANNA_VALA_C
 	Search.vala
 	Server.vala
 PACKAGES
-    glib-2.0
-    gee-1.0
-    gio-2.0
-    libgda-5.0
-    libxml-2.0
+	glib-2.0
+	gee-0.8
+	gio-2.0
+	libgda-5.0
+	libxml-2.0
 OPTIONS
 	--thread
 	--vapidir=${CMAKE_SOURCE_DIR}/vapi
 	--vapidir=${CMAKE_SOURCE_DIR}
 	--enable-experimental
 	--debug
+	-g
 GENERATE_VAPI
 	${PKGNAME}-${PKGVERSION}
 GENERATE_HEADER
 	${PKGNAME}-${PKGVERSION})
 
 find_package(PkgConfig)
-pkg_check_modules(LIBALMANNA_DEPS REQUIRED glib-2.0 gee-1.0 gio-2.0 libgda-5.0 libxml-2.0)
+pkg_check_modules(LIBALMANNA_DEPS REQUIRED glib-2.0 gee-0.8 gio-2.0 libgda-5.0 libxml-2.0)
 set(LIBALMANNA_CFLAGS
-        ${LIBALMANNA_DEPS_CFLAGS} ${LIBALMANNA_DEPS_CFLAGS_OTHER}
+	${LIBALMANNA_DEPS_CFLAGS}
+	${LIBALMANNA_DEPS_CFLAGS_OTHER}
 )
 set(LIBALMANNA_LIB_PATHS
-        ${LIBALMANNA_DEPS_LIBRARY_DIRS}
+	${LIBALMANNA_DEPS_LIBRARY_DIRS}
 )
 link_directories(${LIBALMANNA_LIB_PATHS})
 add_definitions(${LIBALMANNA_CFLAGS})
