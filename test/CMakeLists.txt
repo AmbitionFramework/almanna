@@ -14,12 +14,12 @@ vala_precompile(VALA_C
 	connection.vala
 	connectionpool.vala
 PACKAGES
-    glib-2.0
-    gee-1.0
-    gio-2.0
-    libgda-5.0
-    libxml-2.0
-    ${PKGNAME}-${PKGVERSION}
+	glib-2.0
+	gee-1.0
+	gio-2.0
+	libgda-5.0
+	libxml-2.0
+	${PKGNAME}-${PKGVERSION}
 OPTIONS
 	--thread
 	--vapidir ../src/libalmanna
@@ -29,16 +29,16 @@ OPTIONS
 find_package(PkgConfig)
 pkg_check_modules(DEPS REQUIRED glib-2.0 gee-1.0 gio-2.0 libgda-5.0 libxml-2.0)
 set(CFLAGS
-        ${DEPS_CFLAGS} ${DEPS_CFLAGS_OTHER} -I../src/libalmanna
+	${DEPS_CFLAGS} ${DEPS_CFLAGS_OTHER} -I${CMAKE_BINARY_DIR}/src/libalmanna
 )
 set(LIB_PATHS
-        ${DEPS_LIBRARY_DIRS} ${CMAKE_BINARY_DIR}/src/libalmanna
+	${DEPS_LIBRARY_DIRS} ${CMAKE_BINARY_DIR}/src/libalmanna ${CMAKE_BINARY_DIR}/src
 )
 link_directories(${LIB_PATHS})
 add_definitions(${CFLAGS})
 
 add_executable(${BINNAME} ${VALA_C})
-include_directories(${CMAKE_BINARY_DIR}/src)
+include_directories(${CMAKE_BINARY_DIR}/src/libalmanna)
 add_dependencies(${BINNAME} ${PKGNAME}-${PKGVERSION})
 target_link_libraries(${BINNAME} ${DEPS_LIBRARIES} gthread-2.0 almanna-0.1)
 include(Tests)

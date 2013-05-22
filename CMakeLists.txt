@@ -26,4 +26,7 @@ add_subdirectory (src/libalmanna)
 add_subdirectory (src/bin)
 add_subdirectory (test)
 
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/libgda-5.0.vapi DESTINATION ${CMAKE_INSTALL_PREFIX}/share/vala/vapi/)
+install (
+	FILES ${CMAKE_CURRENT_SOURCE_DIR}/libgda-5.0.vapi
+	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/vala/vapi/
+)
