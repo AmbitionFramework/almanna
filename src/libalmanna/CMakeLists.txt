@@ -27,6 +27,7 @@ OPTIONS
 	--vapidir=${CMAKE_SOURCE_DIR}
 	--enable-experimental
 	--debug
+	--target-glib=2.32
 	-g
 GENERATE_VAPI
 	${PKGNAME}-${PKGVERSION}

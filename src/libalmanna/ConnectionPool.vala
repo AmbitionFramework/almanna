@@ -26,7 +26,7 @@ namespace Almanna {
 	 * applications.
 	 */
 	public class ConnectionPool : Object {
-		private Mutex mutex = new Mutex();
+		private Mutex mutex = Mutex();
 		private int pool_size = 0;
 		private ArrayList<Connection?> pool = new ArrayList<Connection?>();
 		private string connection_string;
