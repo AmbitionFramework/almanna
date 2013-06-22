@@ -99,14 +99,15 @@ namespace Almanna {
 		 * @return Entity
 		 */
 		public G lookup( int? default_id, ... ) throws SearchError {
+			var args = va_list();
+
 			// Check for default ID and go for it if it exists.
 			if ( default_id != null ) {
-				eq( core_entity.primary_key_list[0], default_id );
+				this.eq( core_entity.primary_key_list[0], default_id );
 				return single();
 			}
 
 			// Back to the varargs
-			var args = va_list();
 			while (true) {
 				bool has_key = false;
 				string? key = args.arg();
@@ -124,7 +125,7 @@ namespace Almanna {
 					throw new SearchError.INVALID_KEY( "Key name %s not found".printf(key) );
 				}
 				int val = args.arg();
-				eq( key.replace( "-", "_" ), val );
+				this.eq( key.replace( "-", "_" ), val );
 			}
 			return single();
 		}
@@ -181,7 +182,8 @@ namespace Almanna {
 		 * @param value Value
 		 */
 		public Search<G> eq( string column, ... ) throws SearchError {
-			add_comparison( SqlOperatorType.EQ, column, va_list() );
+			var args = va_list();
+			add_comparison( SqlOperatorType.EQ, column, args );
 			return this;
 		}
 
@@ -660,25 +662,25 @@ namespace Almanna {
 			if ( comparison_type != SqlOperatorType.ISNOTNULL && comparison_type != SqlOperatorType.ISNULL ) {
 				v = Value(column_type);
 				switch (column_type.name()) {
-					case "gchararray":  // string
-						string? val = args.arg();
-						v.set_string(val);
-						break;
 					case "gint": // int
-						int val = args.arg();
+						int? val = args.arg<int?>();
 						v.set_int(val);
 						break;
+					case "gchararray":  // string
+						string? val = args.arg<string?>();
+						v.set_string(val);
+						break;
 					case "gdouble": // double
-						double? val = args.arg();
+						double? val = args.arg<double?>();
 						v.set_double(val);
 						break;
 					case "gchar": // char
-						int ival = args.arg();
+						int ival = args.arg<char?>();
 						char val = (char) ival;
 						v.set_char(val);
 						break;
 					case "gboolean": // bool
-						bool val = args.arg();
+						bool val = args.arg<bool?>();
 						v.set_boolean(val);
 						break;
 				}
