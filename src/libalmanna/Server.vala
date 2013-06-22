@@ -198,22 +198,18 @@ namespace Almanna {
 				}
 				ParamSpec ps = entity._get_property( h.name );
 				if ( ps != null ) {
-					try {
-						Value? v = h.get_value();
-						if ( v != null ) {
-							Type? gtype = v.type();
-							if ( gtype != null && gtype != 0 ) {
-								Value new_value;
-								try {
-									new_value = Search.modify_entity_value( ps, v );
-									entity.set_property( ps.name, new_value );
-								} catch (SearchError e) {
-									
-								}
+					Value? v = h.get_value();
+					if ( v != null ) {
+						Type? gtype = v.type();
+						if ( gtype != null && gtype != 0 ) {
+							Value new_value;
+							try {
+								new_value = Search.modify_entity_value( ps, v );
+								entity.set_property( ps.name, new_value );
+							} catch (SearchError e) {
+								
 							}
 						}
-					} catch (Error e) {
-						stderr.printf( "Error setting value for property %s: %s\n", ps.name, e.message );
 					}
 				}
 			}

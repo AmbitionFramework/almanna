@@ -186,11 +186,27 @@ namespace Almanna {
 		}
 
 		/**
-		 * Bind properties in this entity from properties in the given entity.
+		 * Bind properties to this entity from properties in the given entity.
 		 * @param o Source GObject
 		 */
-		public void bind_data_from( Object o ) {
-			DataBinder.bind( o, this );
+		public void bind_data_from( Object o, bool? ignore_nulls = false ) {
+			if (ignore_nulls) {
+				DataBinder.bind_ignore_null( o, this );
+			} else {
+				DataBinder.bind( o, this );		
+			}
+		}
+
+		/**
+		 * Bind properties from this entity to properties in the given entity.
+		 * @param o Destination GObject
+		 */
+		public void bind_data_to( Object o, bool? ignore_nulls = false ) {
+			if (ignore_nulls) {
+				DataBinder.bind_ignore_null( this, o );
+			} else {
+				DataBinder.bind( this, o );		
+			}
 		}
 
 		public Search<Entity> search() throws SearchError {

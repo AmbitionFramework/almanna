@@ -504,12 +504,10 @@ namespace Almanna {
 				RelationshipInfo r = core_entity.relationships[property_name];
 				if ( r != null && r.relationship_type != RelationshipType.MANY ) {
 					if ( entity_map[property_name] != null ) {
-						try {
-							ParamSpec ps = ((Entity) entity)._get_property(property_name);
-							Value new_value = Value( ps.value_type );
-							new_value.set_object( entity_map[property_name] );
-							((Entity) entity).set_property( ps.name, new_value );
-						} catch (Error e) {}
+						ParamSpec ps = ((Entity) entity)._get_property(property_name);
+						Value new_value = Value( ps.value_type );
+						new_value.set_object( entity_map[property_name] );
+						((Entity) entity).set_property( ps.name, new_value );
 					}
 				}
 			}

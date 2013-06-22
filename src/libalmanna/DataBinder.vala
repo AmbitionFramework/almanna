@@ -28,16 +28,33 @@ namespace Almanna {
 		 * @param source_object      Source GObject
 		 * @param destination_object Destination GObject
 		 */
-		public static void bind( Object source_object, Object destination_object ) {
+		public static void bind( Object source_object, Object destination_object, bool? ignore_null = false ) {
 			// Iterate through destination properties
 			foreach ( ParamSpec ps in destination_object.get_class().list_properties() ) {
 				// Check if source object has this property
 				if ( source_object.get_class().find_property( ps.name ) != null ) {
 					Value v = Value( ps.value_type );
 					source_object.get_property( ps.name, ref v );
+					stdout.printf( "value: %s\n", v.strdup_contents() );
+					if ( ignore_null && v.strdup_contents() == "NULL" ) {
+						continue;
+					}
 					destination_object.set_property( ps.name, v );
 				}
 			}
+		}
+
+		/**
+		 * Bind data from properties in the source object to properties in the
+		 * destination object, unless the source property is null. Properties
+		 * that do not exist in the destination object will not be bound to
+		 * anything. Properties that contain a null value will not replace
+		 * values in the destination object.
+		 * @param source_object      Source GObject
+		 * @param destination_object Destination GObject
+		 */
+		public static void bind_ignore_null( Object source_object, Object destination_object ) {
+			bind( source_object, destination_object, true );
 		}
 	}
 }
