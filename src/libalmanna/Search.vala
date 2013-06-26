@@ -99,7 +99,7 @@ namespace Almanna {
 		 * @return Entity
 		 */
 		public G lookup( int? default_id, ... ) throws SearchError {
-			var args = va_list();
+			var args = va_list.copy( va_list() );
 
 			// Check for default ID and go for it if it exists.
 			if ( default_id != null ) {
@@ -182,8 +182,8 @@ namespace Almanna {
 		 * @param value Value
 		 */
 		public Search<G> eq( string column, ... ) throws SearchError {
-			var args = va_list();
-			add_comparison( SqlOperatorType.EQ, column, args );
+			var args = va_list.copy( va_list() );
+			this.add_comparison( SqlOperatorType.EQ, column, args );
 			return this;
 		}
 
@@ -194,7 +194,8 @@ namespace Almanna {
 		 * @param value Value
 		 */
 		public Search<G> gt( string column, ... ) throws SearchError {
-			add_comparison( SqlOperatorType.GT, column, va_list() );
+			var args = va_list.copy( va_list() );
+			add_comparison( SqlOperatorType.GT, column, args );
 			return this;
 		}
 		
@@ -204,7 +205,8 @@ namespace Almanna {
 		 * @param value Value
 		 */
 		public Search<G> lt( string column, ... ) throws SearchError {
-			add_comparison( SqlOperatorType.LT, column, va_list() );
+			var args = va_list.copy( va_list() );
+			add_comparison( SqlOperatorType.LT, column, args );
 			return this;
 		}
 		
@@ -274,7 +276,10 @@ namespace Almanna {
 		 * @param is_descending Set true if order is descending. Defaults to false.
 		 */
 		public Search<G> order_by( string column, bool is_descending = false ) {
-			orders.add( OrderBy() { column_name = column, is_descending = is_descending } );
+			orders.add( OrderBy() {
+				column_name = column,
+				is_descending = is_descending
+			} );
 			return this;
 		}
 
@@ -556,9 +561,12 @@ namespace Almanna {
 		 * @param v Value of data store value.
 		 */
 		internal static Value modify_entity_value( ParamSpec ps, Value v ) throws SearchError {
+			// Throw out null value
 			if ( v.type().name() == "GdaNull" ) {
 				throw new SearchError.INVALID("");
 			}
+
+			// gda creates a Timestamp, but entities use DateTime
 			if ( v.type() == typeof(Timestamp) && ps.value_type == typeof(DateTime) ) {
 				unowned Timestamp t = (Timestamp) v.get_boxed();
 				Value new_value = Value( typeof(DateTime) );
@@ -574,16 +582,21 @@ namespace Almanna {
 				);
 				return new_value;
 			}
+
+			// Convert string value to int property
 			if ( v.type() == typeof(string) && ps.value_type == typeof(int) ) {
 				Value new_value = Value( typeof(int) );
 				new_value.set_int( int.parse( v.get_string() ) );
 				return new_value;
 			}
+
+			// Convert int value to string property
 			if ( v.type() == typeof(int) && ps.value_type == typeof(string) ) {
 				Value new_value = Value( typeof(string) );
 				new_value.set_string( v.get_int().to_string() );
 				return new_value;
 			}
+
 			return v;
 		}
 
@@ -653,7 +666,6 @@ namespace Almanna {
 
 		private void add_comparison( SqlOperatorType comparison_type, string column, va_list args ) throws SearchError {
 			Type? column_type = get_entity_column_gtype(column);
-			string column_name = get_entity_column_name(column);
 			if ( column_type == null ) {
 				throw new SearchError.INVALID_COLUMN( "Column name %s not found".printf(column) );
 			}
@@ -663,6 +675,9 @@ namespace Almanna {
 				v = Value(column_type);
 				switch (column_type.name()) {
 					case "gint": // int
+					stdout.printf( "compare for c %s, gint\n", column);
+						string? foo = args.arg<string?>();
+						stdout.printf( "str %s\n", foo );
 						int? val = args.arg<int?>();
 						v.set_int(val);
 						break;

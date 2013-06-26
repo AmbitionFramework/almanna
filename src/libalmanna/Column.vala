@@ -58,7 +58,7 @@ namespace Almanna {
 		 */
 		public string sequence_name { get; set; }
 
-		public ParseMethod parser { get; set; }
+		private ParseMethod parser;
 
 		/**
 		 * Create column with named parameters
