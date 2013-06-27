@@ -99,15 +99,17 @@ namespace Almanna {
 		 * @return Entity
 		 */
 		public G lookup( int? default_id, ... ) throws SearchError {
-			var args = va_list.copy( va_list() );
 
 			// Check for default ID and go for it if it exists.
 			if ( default_id != null ) {
-				this.eq( core_entity.primary_key_list[0], default_id );
+				int transformed_id = 1;
+				transformed_id = default_id;
+				this.eq( core_entity.primary_key_list[0], transformed_id );
 				return single();
 			}
 
 			// Back to the varargs
+			var args = va_list();
 			while (true) {
 				bool has_key = false;
 				string? key = args.arg();
@@ -177,42 +179,40 @@ namespace Almanna {
 
 		/**
 		 * Add an equality check to the search, is equivalent to WHERE foo =
-		 * 'bar'.
+		 * 'bar'. Values must not be null or nullable.
 		 * @param column Column name
 		 * @param value Value
 		 */
 		public Search<G> eq( string column, ... ) throws SearchError {
-			var args = va_list.copy( va_list() );
-			this.add_comparison( SqlOperatorType.EQ, column, args );
+			this.add_comparison( SqlOperatorType.EQ, column, va_list() );
 			return this;
 		}
 
 		/**
 		 * Add a greater-than check to the search, is equivalent to WHERE foo >
-		 * 1.
+		 * 1. Values must not be null or nullable.
 		 * @param column Column name
 		 * @param value Value
 		 */
 		public Search<G> gt( string column, ... ) throws SearchError {
-			var args = va_list.copy( va_list() );
-			add_comparison( SqlOperatorType.GT, column, args );
+			add_comparison( SqlOperatorType.GT, column, va_list() );
 			return this;
 		}
 		
 		/**
 		 * Add a less-than check to the search, is equivalent to WHERE foo > 1.
+		 * Values must not be null or nullable.
 		 * @param column Column name
 		 * @param value Value
 		 */
 		public Search<G> lt( string column, ... ) throws SearchError {
-			var args = va_list.copy( va_list() );
-			add_comparison( SqlOperatorType.LT, column, args );
+			add_comparison( SqlOperatorType.LT, column, va_list() );
 			return this;
 		}
 		
 		/**
 		 * Add a greater-than-or-equal-to check to the search, is equivalent to
-		 * WHERE foo >= 1.
+		 * WHERE foo >= 1. Values must not be null or nullable.
 		 * @param column Column name
 		 * @param value Value
 		 */
@@ -223,7 +223,7 @@ namespace Almanna {
 		
 		/**
 		 * Add a less-than-or-equal-to check to the search, is equivalent to
-		 * WHERE foo <= 1.
+		 * WHERE foo <= 1. Values must not be null or nullable.
 		 * @param column Column name
 		 * @param value Value
 		 */
@@ -252,7 +252,8 @@ namespace Almanna {
 		}
 		
 		/**
-		 * Add a like check to the search, is equivalent to WHERE foo LIKE 'bar'.
+		 * Add a like check to the search, is equivalent to WHERE foo LIKE
+		 * 'bar'. Values must not be null or nullable.
 		 * @param column Column name
 		 */
 		public Search<G> like( string column, ... ) throws SearchError {
@@ -262,7 +263,8 @@ namespace Almanna {
 		
 		/**
 		 * Add an ilike check to the search, is equivalent to WHERE foo ILIKE
-		 * 'bar', but will only work with PostgreSQL.
+		 * 'bar', but will only work with PostgreSQL. Values must not be null or
+		 * nullable.
 		 * @param column Column name
 		 */
 		public Search<G> ilike( string column, ... ) throws SearchError {
@@ -674,23 +676,20 @@ namespace Almanna {
 			if ( comparison_type != SqlOperatorType.ISNOTNULL && comparison_type != SqlOperatorType.ISNULL ) {
 				v = Value(column_type);
 				switch (column_type.name()) {
-					case "gint": // int
-					stdout.printf( "compare for c %s, gint\n", column);
-						string? foo = args.arg<string?>();
-						stdout.printf( "str %s\n", foo );
-						int? val = args.arg<int?>();
-						v.set_int(val);
-						break;
 					case "gchararray":  // string
 						string? val = args.arg<string?>();
 						v.set_string(val);
+						break;
+					case "gint": // int
+						int val = args.arg<int>();
+						v.set_int(val);
 						break;
 					case "gdouble": // double
 						double? val = args.arg<double?>();
 						v.set_double(val);
 						break;
 					case "gchar": // char
-						int ival = args.arg<char?>();
+						int ival = args.arg<int?>();
 						char val = (char) ival;
 						v.set_char(val);
 						break;
