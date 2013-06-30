@@ -16,38 +16,27 @@ vala_precompile(LIBALMANNA_VALA_C
 	Search.vala
 	Server.vala
 PACKAGES
-	glib-2.0
-	gee-0.8
-	gio-2.0
-	libgda-5.0
-	libxml-2.0
+	${DEFAULT_PACKAGES}
 OPTIONS
-	--thread
-	${VAPIDIRS}
-	--enable-experimental
-	--debug
-	--target-glib=2.32
-	-g
+	${DEFAULT_VALA_OPTIONS}
 GENERATE_VAPI
 	${PKGNAME}-${PKGVERSION}
 GENERATE_HEADER
 	${PKGNAME}-${PKGVERSION})
 
-find_package(PkgConfig)
-pkg_check_modules(LIBALMANNA_DEPS REQUIRED glib-2.0 gee-0.8 gio-2.0 libgda-5.0 libxml-2.0)
 set(LIBALMANNA_CFLAGS
-	${LIBALMANNA_DEPS_CFLAGS}
-	${LIBALMANNA_DEPS_CFLAGS_OTHER}
+	${DEPS_CFLAGS}
+	${DEPS_CFLAGS_OTHER}
 	-w
 )
 set(LIBALMANNA_LIB_PATHS
-	${LIBALMANNA_DEPS_LIBRARY_DIRS}
+	${DEPS_LIBRARY_DIRS}
 )
 link_directories(${LIBALMANNA_LIB_PATHS})
 add_definitions(${LIBALMANNA_CFLAGS})
 
 add_library(${PKGNAME}-${PKGVERSION} SHARED ${LIBALMANNA_VALA_C})
-target_link_libraries(${PKGNAME}-${PKGVERSION} ${LIBALMANNA_DEPS_LIBRARIES})
+target_link_libraries(${PKGNAME}-${PKGVERSION} ${DEPS_LIBRARIES})
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/${PKGNAME}-${PKGVERSION}.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PKGNAME}-${PKGVERSION}.pc)
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${PKGNAME}-${PKGVERSION}.vapi ../../${PKGNAME}-${PKGVERSION}.deps DESTINATION ${CMAKE_INSTALL_PREFIX}/share/vala/vapi/)
