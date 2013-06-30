@@ -21,6 +21,11 @@ set (PKGNAME almanna)
 set (PKGVERSION 0.1)
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
 set (DOLLAR "$")
+set (VAPIDIRS 
+	--vapidir='${CMAKE_SOURCE_DIR}'
+	--vapidir='${CMAKE_SOURCE_DIR}/..'
+	--vapidir='${CMAKE_BINARY_DIR}/src/libalmanna'
+)
 
 add_subdirectory (src/libalmanna)
 add_subdirectory (src/bin)

@@ -22,9 +22,9 @@ PACKAGES
 	${PKGNAME}-${PKGVERSION}
 OPTIONS
 	--thread
-	--vapidir ../src/libalmanna
-	--vapidir=${CMAKE_SOURCE_DIR}
+	${VAPIDIRS}
 	--enable-experimental
+	--target-glib=2.32
 	--debug
 	-g)
 

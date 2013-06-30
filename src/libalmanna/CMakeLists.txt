@@ -23,8 +23,7 @@ PACKAGES
 	libxml-2.0
 OPTIONS
 	--thread
-	--vapidir=${CMAKE_SOURCE_DIR}/vapi
-	--vapidir=${CMAKE_SOURCE_DIR}
+	${VAPIDIRS}
 	--enable-experimental
 	--debug
 	--target-glib=2.32

@@ -17,7 +17,7 @@ PACKAGES
 	almanna-${PKGVERSION}
 OPTIONS
 	--thread
-	--vapidir ../libalmanna
+	${VAPIDIRS}
 	--enable-experimental
 	--debug
 	-g)
