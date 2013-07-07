@@ -435,7 +435,7 @@ namespace Almanna {
 
 					if (!as_count) {
 						foreach ( string c in entity.columns.keys ) {
-							builder.select_add_field( c, property_name, "%s_%s".printf( property_name, c ) );
+							builder.select_add_field( c, property_name, null );
 							result_columns.add( TableColumn() { table_alias = property_name, column_name = c } );
 						}
 					}
