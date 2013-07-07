@@ -33,6 +33,7 @@ namespace Almanna {
 	struct OrderBy {
 		public string column_name;
 		public bool is_descending;
+		public bool is_raw;
 	}
 
 	struct TableColumn {
@@ -273,14 +274,29 @@ namespace Almanna {
 		}
 		
 		/**
-		 * Add an order expression.
+		 * Add an ordered column.
 		 * @param column Column name
 		 * @param is_descending Set true if order is descending. Defaults to false.
 		 */
 		public Search<G> order_by( string column, bool is_descending = false ) {
 			orders.add( OrderBy() {
 				column_name = column,
-				is_descending = is_descending
+				is_descending = is_descending,
+				is_raw = false
+			} );
+			return this;
+		}
+		
+		/**
+		 * Add a raw order expression.
+		 * @param column Column name
+		 * @param is_descending Set true if order is descending. Defaults to false.
+		 */
+		public Search<G> order_by_raw( string column, bool is_descending = false ) {
+			orders.add( OrderBy() {
+				column_name = column,
+				is_descending = is_descending,
+				is_raw = true
 			} );
 			return this;
 		}
@@ -455,7 +471,11 @@ namespace Almanna {
 
 			// Build ORDER
 			foreach ( OrderBy o in orders ) {
-				var field_id = builder.add_field_id( o.column_name, "me" );
+				var field_id = (
+					o.is_raw ?
+						builder.add_field_id( o.column_name, "" )
+						: builder.add_field_id( o.column_name, "me" )
+				);
 				builder.select_order_by( field_id, !o.is_descending, null );
 			}
 
