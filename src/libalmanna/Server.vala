@@ -86,6 +86,14 @@ namespace Almanna {
 		}
 
 		/**
+		 * Convenience method to return the current instance's config.
+		 */
+		public static string provider() {
+			var connection_string = get_instance().config.connection_string;
+			return connection_string.substring( 0, connection_string.index_of(":") );
+		}
+
+		/**
 		 * Return true if the connection is ready.
 		 */
 		public bool is_opened() {

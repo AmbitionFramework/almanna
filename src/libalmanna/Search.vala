@@ -410,7 +410,7 @@ namespace Almanna {
 				);
 			} else {
 				foreach ( string c in core_entity.columns.keys ) {
-					builder.select_add_field( c, "me", "me_%s".printf(c) );
+					builder.select_add_field( c, "me", null );
 					result_columns.add( TableColumn() { table_alias = "me", column_name = c } );
 				}
 			}
@@ -452,7 +452,9 @@ namespace Almanna {
 					table_name = pair[0];
 					column_name = pair[1];
 				}
+
 				var field_id = builder.add_field_id( column_name, table_name );
+
 				SqlBuilderId value_id = 0;
 				if ( c.right != null ) {
 					value_id = builder.add_expr_value( null, c.right );
@@ -716,6 +718,18 @@ namespace Almanna {
 					case "gboolean": // bool
 						bool val = args.arg<bool?>();
 						v.set_boolean(val);
+						break;
+					case "GDateTime": // DateTime
+						DateTime val = args.arg<DateTime>();
+						v = Value( typeof(string) );
+						string format = "%Y-%m-%d %H:%M:%S%z";
+
+						// SQLite doesn't do time zones.
+						if ( Server.provider() == "SQLite" ) {
+							format = "%Y-%m-%d %H:%M:%S";
+						}
+
+						v.set_string( val.format(format) );
 						break;
 				}
 			}

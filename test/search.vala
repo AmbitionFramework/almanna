@@ -68,7 +68,7 @@ public class SearchTest {
 			var count = search.count();
 			assert( count == 2 );
 		});
-		Test.add_func("/almanna/search/eq", () => {
+		Test.add_func("/almanna/search/eq_int", () => {
 			var s = new Almanna.Search<UserEntity>();
 			s.eq( "user_id", 1 );
 			UserEntity ue = s.single();
@@ -77,7 +77,25 @@ public class SearchTest {
 			assert( ue.username == "foobar" );
 			assert( ue.status == "Valid" );
 		});
-		Test.add_func("/almanna/search/gt", () => {
+		Test.add_func("/almanna/search/eq_string", () => {
+			var s = new Almanna.Search<UserEntity>();
+			s.eq( "username", "foobar" );
+			UserEntity ue = s.single();
+			assert( ue != null );
+			assert( ue.user_id == 1 );
+			assert( ue.username == "foobar" );
+			assert( ue.status == "Valid" );
+		});
+		Test.add_func("/almanna/search/eq_datetime", () => {
+			var s = new Almanna.Search<UserEntity>();
+			s.eq( "date_created", new DateTime.utc( 2012, 1, 5, 12, 31, 49 ) );
+			UserEntity ue = s.single();
+			assert( ue != null );
+			assert( ue.user_id == 1 );
+			assert( ue.username == "foobar" );
+			assert( ue.status == "Valid" );
+		});
+		Test.add_func("/almanna/search/gt_int", () => {
 			var s = new Almanna.Search<UserEntity>();
 			s.gt( "user_id", 1 );
 			UserEntity ue = s.single();
@@ -85,6 +103,20 @@ public class SearchTest {
 			assert( ue.user_id == 2 );
 			assert( ue.username == "barfoo" );
 			assert( ue.status == "Invalid" );
+		});
+		Test.add_func("/almanna/search/gt_datetime", () => {
+			var s = new Almanna.Search<UserEntity>();
+			s.gt( "date_created", new DateTime.utc( 2012, 1, 5, 12, 31, 48 ) );
+			UserEntity ue = s.single();
+			assert( ue != null );
+			assert( ue.user_id == 1 );
+			assert( ue.username == "foobar" );
+			assert( ue.status == "Valid" );
+
+			s = new Almanna.Search<UserEntity>();
+			s.gt( "date_created", new DateTime.utc( 2012, 1, 5, 12, 31, 50 ) );
+			ue = s.single();
+			assert( ue == null );
 		});
 		Test.add_func("/almanna/search/lt", () => {
 			var s = new Almanna.Search<UserEntity>();

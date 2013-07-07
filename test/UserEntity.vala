@@ -26,6 +26,7 @@ public class UserEntity : Almanna.Entity {
 	public string username { get; set; }
 	public string password { get; set; }
 	public string status { get; set; default = "New"; }
+	public DateTime date_created { get; set; }
 	public UserEntityOne entity_one { get; set; }
 	public UserEntityOne entity_might_one { get; set; }
 	public ArrayList<UserEntityMany> entity_many { get; set; }
@@ -44,6 +45,7 @@ public class UserEntity : Almanna.Entity {
 		add_column( new Column<string>.with_name_type( "username", "varchar" ) );
 		add_column( new Column<string>.with_name_type( "password", "varchar" ) );
 		add_column( new Column<string>.with_default_value( "status", "varchar", "New" ) );
+		add_column( new Column<string>.with_default_value( "date_created", "timestamp", "New" ) );
 	}
 
 	public void do_add_columns() {
@@ -52,6 +54,7 @@ public class UserEntity : Almanna.Entity {
 		al.add( new Column<string>.with_name_type( "username", "varchar" ) );
 		al.add( new Column<string>.with_name_type( "password", "varchar" ) );
 		al.add( new Column<string>.with_default_value( "status", "varchar", "New" ) );
+		al.add( new Column<string>.with_default_value( "date_created", "timestamp", "New" ) );
 		add_columns(al);
 	}
 
