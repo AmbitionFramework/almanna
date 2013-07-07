@@ -148,6 +148,16 @@ public class SearchTest {
 			assert( ue.user_id == 2 );
 			assert( ue.username == "barfoo" );
 		});
+		/* Unsupported by SQLite.
+		Test.add_func("/almanna/search/distinct", () => {
+			var s = new Almanna.Search<UserEntity>();
+			s.distinct("password");
+			stdout.printf( "%s\n", s.as_query() );
+			int64 count = s.count();
+			stdout.printf( "count: %d\n", (int) count );
+			assert( count == 1 );
+		});
+		*/
 		Test.add_func("/almanna/search/join/has_one", () => {
 			var s = new Almanna.Search<UserEntity>();
 			s.eq( "user_id", 1 );
@@ -176,6 +186,19 @@ public class SearchTest {
 			assert( ue != null );
 			assert( ue.user_id == 2 );
 			assert( ue.entity_might_one == null );
+		});
+		Test.add_func("/almanna/search/join/might_have/multiple", () => {
+			var s = new Almanna.Search<UserEntity>();
+			s.order_by("user_id");
+			s.relationship("entity_might_one");
+			Gee.ArrayList<UserEntity> ues = s.list();
+			assert( ues[0] != null );
+			assert( ues[0].user_id == 1 );
+			assert( ues[0].entity_might_one != null );
+			assert( ues[0].entity_might_one.check_flag == "Y" );
+			assert( ues[1] != null );
+			assert( ues[1].user_id == 2 );
+			assert( ues[1].entity_might_one == null );
 		});
 		Test.add_func("/almanna/search/join/has_many", () => {
 			var s = new Almanna.Search<UserEntity>();

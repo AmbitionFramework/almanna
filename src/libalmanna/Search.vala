@@ -410,7 +410,7 @@ namespace Almanna {
 				);
 			} else {
 				foreach ( string c in core_entity.columns.keys ) {
-					builder.select_add_field( c, "me", null );
+					var field_id = builder.select_add_field( c, "me", null );
 					result_columns.add( TableColumn() { table_alias = "me", column_name = c } );
 				}
 			}
@@ -522,7 +522,7 @@ namespace Almanna {
 					entity_map[entity_name] = _process_columns_to_entity( dm, row_number, start_index, index - 1, current_entity );
 					start_index = index;
 					entity_name = c.table_alias;
-					current_entity = Repo.get_entity( core_entity.relationships[c.table_alias].entity_type );
+					current_entity = (Entity) Object.new( core_entity.relationships[c.table_alias].entity_type );
 				}
 				index++;
 			}
