@@ -425,7 +425,7 @@ namespace Almanna {
 					"%sadd_column( new Column<%s%s>.with_name_type( \"%s\", \"%s\" ) );".printf(
 						( gtype.length > 0 ? "" : "// " ),
 						gtype,
-						( gtype == "double" ? "?" : "" ), // double/float need to be boxed
+						( gtype == "double" || gtype == "Date" ? "?" : "" ), // double/float need to be boxed
 						column.name,
 						column.data_type
 					)
@@ -566,8 +566,9 @@ namespace Almanna {
 		public string get_data_gtype() {
 			switch (gtype) {
 				case "GdaTimestamp":
-				case "GDate":
 					return "DateTime";
+				case "GDate":
+					return "Date";
 				case "GdaShort":
 				case "gint":
 					return "int";
