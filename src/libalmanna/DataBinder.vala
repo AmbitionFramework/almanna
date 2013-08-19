@@ -35,7 +35,6 @@ namespace Almanna {
 				if ( source_object.get_class().find_property( ps.name ) != null ) {
 					Value v = Value( ps.value_type );
 					source_object.get_property( ps.name, ref v );
-					stdout.printf( "value: %s\n", v.strdup_contents() );
 					if ( ignore_null && v.strdup_contents() == "NULL" ) {
 						continue;
 					}
