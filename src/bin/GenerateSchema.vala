@@ -392,7 +392,7 @@ namespace Almanna {
 		}
 
 		private string table_name_to_class_name( string table_name ) {
-			string[] parts = table_name.split("_");
+			string[] parts = table_name.replace("\"", "").split("_");
 			string class_name = "";
 			foreach ( string part in parts ) {
 				class_name = class_name + part.substring( 0, 1 ).up() + part.substring(1).down();
