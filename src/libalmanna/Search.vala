@@ -178,6 +178,10 @@ namespace Almanna {
 			return this;
 		}
 
+		public int get_page() {
+			return this._page;
+		}
+
 		/**
 		 * Add an equality check to the search, is equivalent to WHERE foo =
 		 * 'bar'. Values must not be null or nullable.
@@ -472,13 +476,15 @@ namespace Almanna {
 			}
 
 			// Build ORDER
-			foreach ( OrderBy o in orders ) {
-				var field_id = (
-					o.is_raw ?
-						builder.add_field_id( o.column_name, "" )
-						: builder.add_field_id( o.column_name, "me" )
-				);
-				builder.select_order_by( field_id, !o.is_descending, null );
+			if (!as_count) {
+				foreach ( OrderBy o in orders ) {
+					var field_id = (
+						o.is_raw ?
+							builder.add_field_id( o.column_name, "" )
+							: builder.add_field_id( o.column_name, "me" )
+					);
+					builder.select_order_by( field_id, !o.is_descending, null );
+				}
 			}
 
 			// Build LIMIT
