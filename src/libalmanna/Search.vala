@@ -475,8 +475,8 @@ namespace Almanna {
 				builder.set_where(conditions);
 			}
 
-			// Build ORDER
 			if (!as_count) {
+				// Build ORDER
 				foreach ( OrderBy o in orders ) {
 					var field_id = (
 						o.is_raw ?
@@ -485,10 +485,10 @@ namespace Almanna {
 					);
 					builder.select_order_by( field_id, !o.is_descending, null );
 				}
-			}
 
-			// Build LIMIT
-			add_limit_to_builder(builder);
+				// Build LIMIT
+				add_limit_to_builder(builder);
+			}
 
 			return builder;
 		}
