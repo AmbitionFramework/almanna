@@ -21,6 +21,8 @@
 
 namespace Almanna {
 	public class DataBinder : Object {
+		private static string[] bad_properties = null;
+
 		/**
 		 * Bind data from properties in the source object to properties in the
 		 * destination object. Properties that do not exist in the destination
@@ -29,8 +31,25 @@ namespace Almanna {
 		 * @param destination_object Destination GObject
 		 */
 		public static void bind( Object source_object, Object destination_object, bool? ignore_null = false ) {
+			if ( bad_properties == null ) {
+				bad_properties = {
+					"is-dirty",
+					"columns",
+					"dirty-columns",
+					"relationships",
+					"primary-key-values",
+					"constraints",
+					"in-storage",
+					"entity-name"
+				};
+			}
 			// Iterate through destination properties
 			foreach ( ParamSpec ps in destination_object.get_class().list_properties() ) {
+				// Skip default entity properties
+				if ( ps.name in bad_properties ) {
+					continue;
+				}
+
 				// Check if source object has this property
 				if ( source_object.get_class().find_property( ps.name ) != null ) {
 					Value v = Value( ps.value_type );
