@@ -1,0 +1,16 @@
+Source: almanna
+Priority: optional
+Maintainer: Nick Melnick <nick@abstractwankery.com>
+Build-Depends: debhelper (>= 8.0.0), cmake, valac (>= 0.18.0), libglib2.0-dev, libgee-0.8-dev, libgda-5.0-dev, libxml2-dev, libreadline-dev
+Standards-Version: 3.9.4
+Section: devel
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://git.debian.org/collab-maint/almanna.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/almanna.git;a=summary
+
+Package: almanna
+Section: devel
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, cmake, valac (>= 0.18.0), libglib2.0-dev, libgee-0.8-dev, libgda-5.0-4, libxml2, libreadline5
+Description: Almanna ORM for Vala/GObject
+ Almanna ORM for Vala/GObject
