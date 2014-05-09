@@ -20,7 +20,6 @@
  */
 
 using Gda;
-using Gee;
 namespace Almanna {
 	/**
 	 * Provides methods for manipulating a SqlBuilder query.
