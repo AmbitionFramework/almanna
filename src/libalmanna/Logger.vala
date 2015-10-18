@@ -21,6 +21,15 @@
 
 namespace Almanna {
 	internal class ALogger : Object {
+		internal static void error_with_gerror( string message, Error e ) {
+			int code = e.code;
+			string? msg = e.message;
+			if ( msg == null ) {
+				msg = "n/a";
+			}
+			stderr.printf( "[error] %s - %d %s\n", message, code, msg );
+		}
+
 		internal static void error( string message ) {
 			stderr.printf( "[error] %s\n", message );
 		}

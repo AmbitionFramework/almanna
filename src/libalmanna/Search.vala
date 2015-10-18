@@ -640,7 +640,7 @@ namespace Almanna {
 				s = null;
 				return dm;
 			} catch (Error e) {
-				ALogger.error( "Error in execute: %s".printf(e.message) );
+				ALogger.error_with_gerror( "Error in execute", e );
 			}
 			return null;
 		}
@@ -655,7 +655,7 @@ namespace Almanna {
 				s = null;
 				return dm;
 			} catch (Error e) {
-				ALogger.error( "Error in execute: %s".printf(e.message) );
+				ALogger.error_with_gerror( "Error in execute", e );
 			}
 			return null;
 		}
