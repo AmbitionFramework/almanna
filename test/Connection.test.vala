@@ -1,10 +1,10 @@
 /*
- * connection.vala
+ * Connection.test.vala
  * 
  * The Almanna ORM
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2018 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,25 @@
  * limitations under the License.
  */
 
-public class ConnectionTest {
-	public static void add_tests() {
-		Test.add_func("/almanna/connection/init", () => {
-			var connection_string = "SQLite://DB_DIR=.;DB_NAME=test";
-			var c = new Almanna.Connection(connection_string);
-			assert( c != null );
-		});
-		Test.add_func("/almanna/connection/take", () => {
-			var connection_string = "SQLite://DB_DIR=.;DB_NAME=test";
-			var c = new Almanna.Connection(connection_string);
-			bool taken = c.take();
-			assert( taken == true );
-			assert( c.take() == false );
-			c.release();
-			assert( c.take() == true );
-		});
+public class AlmannaTest.Connection : AbstractTestCase {
+	public Connection() {
+		base("Connection");
+		
+		add_test("init", init);
+		add_test("take", take);
+	}
+	
+	public void init() {
+		var c = new Almanna.Connection(connection_string);
+		assert( c != null );
+	}
+
+	public void take() {
+		var c = new Almanna.Connection(connection_string);
+		bool taken = c.take();
+		assert( taken == true );
+		assert( c.take() == false );
+		c.release();
+		assert( c.take() == true );
 	}
 }

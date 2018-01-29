@@ -1,10 +1,10 @@
 /*
- * server.vala
+ * ConnectionPool.test.vala
  * 
  * The Almanna ORM
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2018 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,15 @@
  * limitations under the License.
  */
 
-public class ServerTest {
-	public static void add_tests() {
-		Test.add_func("/almanna/server", () => {
-			var a = Almanna.Server.get_instance();
-			assert( a != null );
-		});
-		Test.add_func("/almanna/server/open", () => {
-			var c = new Almanna.Config();
-			c.connection_string = "SQLite://DB_DIR=.;DB_NAME=test";
-			Almanna.Server.open(c);
-			var a = Almanna.Server.get_instance();
-			assert( a.is_opened() == true );
-		});
+public class AlmannaTest.ConnectionPool : AbstractTestCase {
+	public ConnectionPool() {
+		base("ConnectionPool");
+		
+		add_test("init", init);
+	}
+
+	public void init() {
+		var cp = new Almanna.ConnectionPool( 1, connection_string );
+		assert( cp != null );
 	}
 }

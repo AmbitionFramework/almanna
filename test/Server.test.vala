@@ -1,5 +1,5 @@
 /*
- * connectionpool.vala
+ * server.vala
  * 
  * The Almanna ORM
  * http://www.ambitionframework.org
@@ -19,12 +19,24 @@
  * limitations under the License.
  */
 
-public class ConnectionPoolTest {
-	public static void add_tests() {
-		Test.add_func("/almanna/connectionpool/init", () => {
-			var connection_string = "SQLite://DB_DIR=.;DB_NAME=test";
-			var cp = new Almanna.ConnectionPool( 1, connection_string );
-			assert( cp != null );
-		});
+public class AlmannaTest.Server : AbstractTestCase {
+	public Server() {
+		base("Server");
+		
+		add_test("init", init);
+		add_test("open", open);
+	}
+
+	public void init() {
+		var a = Almanna.Server.get_instance();
+		assert( a != null );
+	}
+
+	public void open() {
+		var c = new Almanna.Config();
+		c.connection_string = connection_string;
+		Almanna.Server.open(c);
+		var a = Almanna.Server.get_instance();
+		assert( a.is_opened() == true );
 	}
 }
