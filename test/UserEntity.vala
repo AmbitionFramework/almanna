@@ -4,7 +4,7 @@
  * The Almanna ORM
  * http://www.ambitionframework.org
  *
- * Copyright 2012-2013 Sensical, Inc.
+ * Copyright 2012-2018 Sensical, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 
 using Almanna;
 using Gee;
+
 public class UserEntity : Almanna.Entity {
 	public int user_id { get; set; }
 	public string username { get; set; }
