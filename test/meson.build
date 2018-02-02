@@ -26,6 +26,9 @@ tests = executable(
     test_name,
     sources: test_sources,
     dependencies: test_deps,
+    vala_args: [
+        '--vapidir=' + meson.current_source_dir() + '/..'
+    ],
     install: false
 )
 
