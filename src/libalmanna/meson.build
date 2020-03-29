@@ -24,7 +24,7 @@ lib = shared_library(
         '--pkg', 'libgda-5.0'
     ],
     install: true,
-    install_dir: 'lib'
+    install_dir: [true, true, true]
 )
 
 lib_inc = include_directories('.')
@@ -53,3 +53,4 @@ install_data(
     library_name + '.deps',
     install_dir: join_paths(get_option('datadir'), 'vala', 'vapi')
 )
+
