@@ -133,8 +133,6 @@ namespace Almanna {
 		public bool show_files { get; set; default = false; }
 
 		public int run() {
-			string? namespace = null;
-
 			status("Connecting to database...");
 			var c = new Almanna.Config();
 			c.connection_string = connection_string;

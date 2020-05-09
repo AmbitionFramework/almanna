@@ -1,11 +1,5 @@
 test_name = meson.project_name() + '-test'
 
-filecopier = find_program('../mesonfilecopy.py')
-a_p = custom_target('test-db',
-    input : 'test.db',
-    output : 'test.db',
-    command : [filecopier, '@INPUT@', '@OUTPUT@'])
-
 test_sources = files([
 	'AbstractTestCase.vala',
 	'TestRunner.vala',
