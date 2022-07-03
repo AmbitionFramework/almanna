@@ -46,13 +46,14 @@ namespace Almanna {
 	 * of records.
 	 */
 	public class Search<G> : Object {
+		private int _page = 0;
+		private int _rows = 0;
+
 		private ArrayList<string> command_list { get; set; default = new ArrayList<string>(); }
 		private string from { get; set; }
 		private ArrayList<string> joins { get; set; default = new ArrayList<string>(); }
 		private ArrayList<Comparison> wheres { get; set; default = new ArrayList<Comparison>(); }
 		private ArrayList<OrderBy?> orders { get; set; default = new ArrayList<OrderBy?>(); }
-		private int _page { get; set; default = 0; }
-		private int _rows { get; set; default = 0; }
 		private Entity core_entity { get; set; }
 		private ArrayList<TableColumn?> result_columns { get; set; }
 
