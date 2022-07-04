@@ -45,8 +45,7 @@ pc = pkg.generate(
     version: meson.project_version(),
     name: library_name,
     filebase: library_name,
-    description: 'Almanna ORM for Vala and/or GObject',
-    install_dir: 'lib/pkgconfig'
+    description: 'Almanna ORM for Vala and/or GObject'
 )
 
 install_data(

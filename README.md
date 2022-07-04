@@ -7,7 +7,7 @@ REQUIREMENTS
 Almanna is written in the Vala programming language, and relies on other
 libraries for its functionality. To build, you will need:
 
-* Vala 0.54.0 or higher
+* Vala 0.48.0 or higher
 * Meson 0.40 or higher, with ninja
 * The GCC 4.x toolchain
 

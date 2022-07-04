@@ -4,8 +4,8 @@ pkg = import('pkgconfig')
 vala = meson.get_compiler('vala')
 
 message('Found Vala ' + vala.version())
-if vala.version().version_compare('<0.54')
-    error('Requires Vala >= 0.54')
+if vala.version().version_compare('<0.48')
+    error('Requires Vala >= 0.48')
 endif
 
 version_split = meson.project_version().split('.')
